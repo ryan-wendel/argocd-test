@@ -21,7 +21,7 @@ spec:
         # image: 192.168.0.180:8000/kubectl-command:latest
         env:
         - name: KUBECTL_COMMAND
-          value: "patch ingress rollouts-foo-ingress -n apps --type=json -p='[{\"op\": \"remove\", \"path\": \"/spec/rules/1\"}]'"
+          value: "cGF0Y2ggaW5ncmVzcyByb2xsb3V0cy1mb28taW5ncmVzcyAtbiBhcHBzIC0tdHlwZT1qc29uIC0tcGF0Y2g9J1t7Im9wIjogInJlbW92ZSIsICJwYXRoIjogIi9zcGVjL3J1bGVzLzEifV0nCg=="
 ---
 apiVersion: batch/v1
 kind: Job
@@ -45,4 +45,4 @@ spec:
         # image: 192.168.0.180:8000/kubectl-command:latest
         env:
         - name: KUBECTL_COMMAND
-          value: "delete svc -n apps rollouts-foo-preview"
+          value: "ZGVsZXRlIHN2YyAtbiBhcHBzIHJvbGxvdXRzLWZvby1wcmV2aWV3"
