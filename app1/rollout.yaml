@@ -5,7 +5,7 @@ metadata:
   namespace: apps
 spec:
   replicas: 6
-  progressDeadlineSeconds: 999999
+  # progressDeadlineSeconds: 999999
   strategy:
     blueGreen:
       activeService: rollouts-foo-active
@@ -39,4 +39,4 @@ spec:
             value: '0'
             # value: '35'
           - name: CONTENT
-            value: '{ "version": "1.0.1" }'
+            value: '{ "version": "1.0.0" }'
