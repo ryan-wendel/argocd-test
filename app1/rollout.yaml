@@ -12,7 +12,7 @@ spec:
       previewService: rollouts-foo-preview
       autoPromotionEnabled: false
       previewReplicaCount: 3
-      scaleDownDelaySeconds: 10
+      scaleDownDelaySeconds: 30
   revisionHistoryLimit: 5
   selector:
     matchLabels:
@@ -39,4 +39,4 @@ spec:
             value: '0'
             # value: '35'
           - name: CONTENT
-            value: '{ "version": "1.0.0" }'
+            value: '{ "version": "1.0.1" }'
