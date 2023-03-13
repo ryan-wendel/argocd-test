@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollouts-foo
+  namespace: apps
+spec:
+  replicas: 6
+  strategy:
+    blueGreen:
+      activeService: rollouts-foo-active
+      previewService: rollouts-foo-preview
+      autoPromotionEnabled: false
+      previewReplicaCount: 3
+      scaleDownDelaySeconds: 10
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: rollouts-foo
+  template:
+    metadata:
+      labels:
+        app: rollouts-foo
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+      # - image: 192.168.0.180:8000/probeserver:latest
+      - image: public.ecr.aws/i4a3l2a7/probeserver:latest
+        name: probeserver
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+          - name: CRASH_FACTOR
+            value: '0'
+            # value: '60'
+          - name: HEALTH_STATUS_FACTOR
+            value: '0'
+            # value: '35'
+          - name: CONTENT
+            value: '{ "version": "1.0.0" }'

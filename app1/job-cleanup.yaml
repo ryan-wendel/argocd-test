@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rollouts-cleanup-job
+  namespace: apps
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: rollouts-cleanup-job
+    spec:
+      restartPolicy: Never
+      serviceAccountName: rollouts-foo-ingress-sa
+      containers:
+      - name: kubectl-command
+        # image: public.ecr.aws/i4a3l2a7/kube-command:latest
+        image: 192.168.0.180:8000/kubectl-command:latest
+        env:
+        - name: KUBECTL_COMMAND
+          value: 'delete svc -n apps rollouts-foo-preview'

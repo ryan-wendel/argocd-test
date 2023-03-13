@@ -1,0 +1,35 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: rollouts-foo-ingress-role
+  namespace: apps
+rules:
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["delete"]
+  resourceNames: ["rollouts-foo-preview"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rollouts-foo-ingress-role-binding
+  namespace: apps
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: rollouts-foo-ingress-role
+subjects:
+- kind: ServiceAccount
+  name: rollouts-foo-ingress-sa
+  namespace: apps
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rollouts-foo-ingress-sa
+  namespace: apps
+# automountServiceAccountToken: false
