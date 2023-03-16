@@ -18,31 +18,44 @@ spec:
       containers:
       - name: kubectl-command
         image: public.ecr.aws/i4a3l2a7/kubectl-command:latest
-        # image: 192.168.0.180:8000/kubectl-command:latest
-        env:
-        - name: KUBECTL_COMMAND
-          value: "cGF0Y2ggaW5ncmVzcyByb2xsb3V0cy1mb28taW5ncmVzcyAtbiBhcHBzIC0tdHlwZT1qc29uIC0tcGF0Y2g9J1t7Im9wIjogInJlbW92ZSIsICJwYXRoIjogIi9zcGVjL3J1bGVzLzEifV0nCg=="
-# ---
-# apiVersion: batch/v1
-# kind: Job
-# metadata:
-#   name: rollouts-cleanup-2-job
-#   namespace: apps
-#   annotations:
-#     argocd.argoproj.io/hook: PostSync
-#     argocd.argoproj.io/hook-delete-policy: HookSucceeded
-# spec:
-#   backoffLimit: 0
-#   template:
-#     metadata:
-#       name: rollouts-cleanup-2-job
-#     spec:
-#       restartPolicy: Never
-#       serviceAccountName: rollouts-foo-ingress-sa
-#       containers:
-#       - name: kubectl-command
-#         image: public.ecr.aws/i4a3l2a7/kubectl-command:latest
-#         # image: 192.168.0.180:8000/kubectl-command:latest
-#         env:
-#         - name: KUBECTL_COMMAND
-#           value: "ZGVsZXRlIHN2YyAtbiBhcHBzIHJvbGxvdXRzLWZvby1wcmV2aWV3"
+        command:
+         - "/bin/bash"
+         - "-c"
+         - "kubectl patch ingress rollouts-foo-ingress -n apps --type=json --patch=\"[{'op': 'remove', 'path': '/spec/rules/1'}]\""
+        # env
+        # - name: KUBECTL_COMMAND
+        #   value: "cGF0Y2ggaW5ncmVzcyByb2xsb3V0cy1mb28taW5ncmVzcyAtbiBhcHBzIC0tdHlwZT1qc29uIC0tcGF0Y2g9J1t7Im9wIjogInJlbW92ZSIsICJwYXRoIjogIi9zcGVjL3J1bGVzLzEifV0nCg=="
+
+# this can be used to delete the preview service
+# argo rollouts would mark the rollout as degraded
+# if this was actually used. not a big worry as
+# the WAN-facing load balancer lister will no longer
+# listen on green.foobarbbq.com and the same result
+# is achieved
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rollouts-cleanup-2-job
+  namespace: apps
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: rollouts-cleanup-2-job
+    spec:
+      restartPolicy: Never
+      serviceAccountName: rollouts-foo-ingress-sa
+      containers:
+      - name: kubectl-command
+        image: public.ecr.aws/i4a3l2a7/kubectl-command:latest
+        command:
+         - "/bin/bash"
+         - "-c"
+         - "kubectl delete svc -n apps rollouts-foo-preview"
+        # env:
+        # - name: KUBECTL_COMMAND
+        #   value: "ZGVsZXRlIHN2YyAtbiBhcHBzIHJvbGxvdXRzLWZvby1wcmV2aWV3"
