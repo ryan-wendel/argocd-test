@@ -58,5 +58,5 @@ spec:
         args:
          - echo "${FILE_CONTENTS_INGRESS}" > /tmp/${FILE_NAME};
            kubectl patch ingress rollouts-foo-ingress -n apps --type=json --patch-file=/tmp/${FILE_NAME};
-           echo "${FILE_CONTENTS_SERVICE}" > /tmp/${FILE_NAME};
-           kubectl apply -f /tmp/${FILE_NAME}
+           # echo "${FILE_CONTENTS_SERVICE}" > /tmp/${FILE_NAME};
+           # kubectl apply -f /tmp/${FILE_NAME}
