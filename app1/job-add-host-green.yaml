@@ -1,0 +1,62 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rollouts-add-host-job
+  namespace: apps
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: rollouts-add-host-job
+    spec:
+      restartPolicy: Never
+      serviceAccountName: rollouts-foo-ingress-sa
+      containers:
+      - name: cmd-exec
+        image: public.ecr.aws/i4a3l2a7/cmd-exec:latest
+        env:
+        - name: FILE_NAME
+          value: "ingress-patch.yaml"
+        - name: FILE_CONTENTS_INGRESS
+          value: |
+            - op: add
+              path: /spec/rules/-
+              value:
+                host: green.foobarbbq.com
+                http:
+                  paths:
+                    - backend:
+                        service:
+                          name: rollouts-foo-preview
+                          port:
+                            name: svc-port
+                      path: /
+                      pathType: Prefix
+        - name: FILE_CONTENTS_SERVICE
+          value: |
+            apiVersion: v1
+            kind: Service
+            metadata:
+              name: rollouts-foo-preview
+              namespace: apps
+              labels:
+                app: rollouts-foo
+            spec:
+              ports:
+                - name: svc-port
+                  port: 80
+                  protocol: TCP
+                  targetPort: 80
+              selector:
+                app: rollouts-foo
+              type: ClusterIP
+        command: [ '/bin/bash', '-c' ]
+        args:
+         - echo "${FILE_CONTENTS_INGRESS}" > /tmp/${FILE_NAME};
+           kubectl patch ingress rollouts-foo-ingress -n apps --type=json --patch-file=/tmp/${FILE_NAME};
+           echo "${FILE_CONTENTS_SERVICE}" > /tmp/${FILE_NAME};
+           kubectl apply -f /tmp/${FILE_NAME}
