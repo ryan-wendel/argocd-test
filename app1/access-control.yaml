@@ -9,7 +9,7 @@ rules:
   resources: ["ingresses"]
   # verbs: ["get", "list", "patch"]
   verbs: ["*"]
-  resourceNames: ["rollouts-foo-ingress"]
+  # resourceNames: ["rollouts-foo-ingress"]
 - apiGroups: [""]
   resources: ["services"]
   verbs: ["get", "list", "create"]
