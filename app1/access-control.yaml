@@ -7,7 +7,8 @@ metadata:
 rules:
 - apiGroups: ["networking.k8s.io"]
   resources: ["ingresses"]
-  verbs: ["get", "list", "patch"]
+  # verbs: ["get", "list", "patch"]
+  verbs: ["*"]
   resourceNames: ["rollouts-foo-ingress"]
 - apiGroups: [""]
   resources: ["services"]
