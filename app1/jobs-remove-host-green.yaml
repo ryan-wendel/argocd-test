@@ -30,4 +30,4 @@ spec:
          - INDEX=$(kubectl get ingress rollouts-foo-ingress -n apps -o json | jq -rM '.spec.rules | map(.host == "green.foobarbbq.com") | index(true)');
            echo "${FILE_CONTENTS_INGRESS}" | sed -e "s/__INDEX__/${INDEX}/" > /tmp/${FILE_NAME};
            kubectl patch ingress rollouts-foo-ingress -n apps --type=json --patch-file=/tmp/${FILE_NAME};
-           kubectl -n apps delete service rollouts-foo-preview
+           # kubectl -n apps delete service rollouts-foo-preview
