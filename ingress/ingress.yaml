@@ -28,7 +28,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: rollouts-foo-active
+                name: rollouts-foo-app1-active
                 port:
                   name: svc-port
 #     - host: "green.foobarbbq.com"
