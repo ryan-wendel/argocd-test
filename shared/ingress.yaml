@@ -1,0 +1,31 @@
+kind: Ingress
+metadata:
+  name: rollouts-foo-ingress
+  namespace: apps
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: rollouts-foo-ingress
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/healthcheck-path: /healthz
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '5'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '3'
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/tags: cdk-stack=EksStack-fstwd3x
+    alb.ingress.kubernetes.io/security-groups: sg-0a889029b0c46c664
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+spec:
+  ingressClassName: alb
+  rules:
+    - host: "blue.foobarbbq.com"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rollouts-foo-active
+                port:
+                  name: svc-port
