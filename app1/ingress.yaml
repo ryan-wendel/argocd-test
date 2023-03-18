@@ -30,16 +30,6 @@ spec:
                 name: rollouts-foo-active
                 port:
                   name: svc-port
-    - host: "red.foobarbbq.com"
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: rollouts-foo-preview
-                port:
-                  name: svc-port
 #     - host: "green.foobarbbq.com"
 #       http:
 #         paths:
