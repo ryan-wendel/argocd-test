@@ -15,7 +15,7 @@ metadata:
     alb.ingress.kubernetes.io/unhealthy-threshold-count: '3'
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
     alb.ingress.kubernetes.io/tags: cdk-stack=EksStack-fstwd3x
-    alb.ingress.kubernetes.io/security-groups: sg-0786d6f22b48b6bca
+    alb.ingress.kubernetes.io/security-groups: sg-0a889029b0c46c664
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
 spec:
   ingressClassName: alb
