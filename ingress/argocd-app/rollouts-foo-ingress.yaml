@@ -1,0 +1,21 @@
+# argocd app create rollouts-foo --repo https://github.com/ryan-wendel/argocd-test.git --path app1 --dest-server https://kubernetes.default.svc --dest-namespace apps --revision HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rollouts-foo-ingress
+  namespace: argocd
+spec:
+  project: default
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+  destination:
+    # name: rollouts-foo-dest
+    namespace: apps
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/ryan-wendel/argocd-test.git
+    # path: part3/app1
+    path: ingress
+    targetRevision: HEAD
