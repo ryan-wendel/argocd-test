@@ -59,9 +59,9 @@ spec:
          - kubectl get -n apps ingress rollouts-foo-ingress >/dev/null 2>&1;
            RC=$?;
            [[ ${RC} -ne 0 ]] && {
-             echo "Error - The Ingress object rollouts-foo-ingress does not exist";
-             exit 0;
-           }
+               echo "Error - The Ingress object rollouts-foo-ingress does not exist";
+               exit 0;
+           };
            echo "${FILE_CONTENTS_INGRESS}" > /tmp/${FILE_NAME};
            cat /tmp/${FILE_NAME};
-           kubectl patch ingress rollouts-foo-app1-ingress -n apps --type=json --patch-file=/tmp/${FILE_NAME};
+           kubectl patch ingress rollouts-foo-ingress -n apps --type=json --patch-file=/tmp/${FILE_NAME};
