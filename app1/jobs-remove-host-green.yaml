@@ -31,4 +31,4 @@ spec:
            echo "${FILE_CONTENTS_INGRESS}" | sed -e "s/__INDEX__/${INDEX}/" > /tmp/${FILE_NAME};
            cat /tmp/${FILE_NAME};
            kubectl patch ingress rollouts-foo-ingress -n apps --type=json --patch-file=/tmp/${FILE_NAME};
-           # kubectl -n apps delete service rollouts-foo-preview
+           kubectl -n apps delete service rollouts-foo-preview
