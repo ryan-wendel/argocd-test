@@ -1,26 +1,25 @@
----
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: rollouts-foo
+  name: rollouts-foo-app1
   namespace: apps
 spec:
   replicas: 6
   strategy:
     blueGreen:
-      activeService: rollouts-foo-active
-      previewService: rollouts-foo-preview
+      activeService: rollouts-foo-app1-active
+      previewService: rollouts-foo-app1-preview
       autoPromotionEnabled: false
       previewReplicaCount: 3
       scaleDownDelaySeconds: 15
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      app: rollouts-foo
+      app: rollouts-foo-app1
   template:
     metadata:
       labels:
-        app: rollouts-foo
+        app: rollouts-foo-app1
     spec:
       terminationGracePeriodSeconds: 0
       containers:
@@ -39,4 +38,4 @@ spec:
             value: '0'
             # value: '35'
           - name: CONTENT
-            value: '{ "version": "1.0.8" }'
+            value: '{ "version": "1.0.0" }'
