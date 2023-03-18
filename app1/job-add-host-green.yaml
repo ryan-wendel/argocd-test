@@ -56,7 +56,7 @@ spec:
 #               type: ClusterIP
         command: [ '/bin/bash', '-c' ]
         args:
-        - kubectl get -n apps ingress rollouts-foo-ingress >/dev/null 2>&1;
+         - kubectl get -n apps ingress rollouts-foo-ingress >/dev/null 2>&1;
            RC=$?;
            [[ ${RC} -ne 0 ]] && {
              echo "Error - The Ingress object rollouts-foo-ingress does not exist";
