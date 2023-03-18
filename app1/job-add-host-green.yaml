@@ -2,16 +2,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: rollouts-add-host-job
+  name: rollouts-remove-host-job
   namespace: apps
   annotations:
-    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
 spec:
   backoffLimit: 0
   template:
     metadata:
-      name: rollouts-add-host-job
+      name: rollouts-remove-host-job
     spec:
       restartPolicy: Never
       serviceAccountName: rollouts-foo-app1-ingress-sa
@@ -23,21 +23,11 @@ spec:
           value: "ingress-patch.yaml"
         - name: FILE_CONTENTS_INGRESS
           value: |
-            - op: add
-              path: /spec/rules/-
-              value:
-                host: green.foobarbbq.com
-                http:
-                  paths:
-                    - backend:
-                        service:
-                          name: rollouts-foo-app1-preview
-                          port:
-                            name: svc-port
-                      path: /
-                      pathType: Prefix
+            - op: remove
+              path: /spec/rules/__INDEX__
         command: [ '/bin/bash', '-c' ]
         args:
-         - echo "${FILE_CONTENTS_INGRESS}" > /tmp/${FILE_NAME};
+         - INDEX=$(kubectl get ingress rollouts-foo-app1-ingress -n apps -o json | jq -rM '.spec.rules | map(.host == "green.foobarbbq.com") | index(true)');
+           echo "${FILE_CONTENTS_INGRESS}" | sed -e "s/__INDEX__/${INDEX}/" > /tmp/${FILE_NAME};
            cat /tmp/${FILE_NAME};
            kubectl patch ingress rollouts-foo-app1-ingress -n apps --type=json --patch-file=/tmp/${FILE_NAME};
