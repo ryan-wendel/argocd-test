@@ -38,4 +38,4 @@ spec:
             value: '0'
             # value: '35'
           - name: CONTENT
-            value: '{ "version": "1.0.4" }'
+            value: '{ "version": "1.0.5" }'
