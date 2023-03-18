@@ -32,7 +32,7 @@ spec:
            [[ ${RC} -ne 0 ]] && {
                echo "Error - The Ingress object rollouts-foo-ingress does not exist";
                exit 0;
-           }
+           };
            INDEX=$(kubectl get ingress rollouts-foo-ingress -n apps -o json | jq -rM '.spec.rules | map(.host == "green.foobarbbq.com") | index(true)');
            echo "${FILE_CONTENTS_INGRESS}" | sed -e "s/__INDEX__/${INDEX}/" > /tmp/${FILE_NAME};
            cat /tmp/${FILE_NAME};
